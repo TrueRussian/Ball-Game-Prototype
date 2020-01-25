@@ -26,24 +26,45 @@ public class playercontroller : MonoBehaviour
 	public GameObject triggercube;
 	Vector3 floorposition = new Vector3(1, 1, 1);
 	float range = 40;
+	GameObject[] oldfloors;
+	public float speedpost = 30;
+	int x = 0;
+	public float limitSpeedpost = 40;
+	public float dragmul;
+	float speedabs;
+	float speedx;
+	float speedy;
+	float time;
+	
 	void Start()
+		
+	
 	{
-
+		GameObject clone = Instantiate(floorprefab, new Vector3(0, 0,0 ), Quaternion.identity);
+		clone.name = ("Clone 1");
 		initialPosition = transform.position;
 		rigidBody = GetComponent<Rigidbody>();
 		SetInfoBoard();
 		collSetup = gameObject.AddComponent<ColliderSetup>();
+		time = Time.deltaTime;
 	}
 
 
 
 	void Update()
 	{
-		Move();
+		speedpost = speedpost + time / 5;
+		limitSpeedpost = limitSpeedpost + time / 5;
 		getVelocity();
-		Check();
+		
 		InfoBoardUpdate();
-		CallJump();
+		
+	}
+	void FixedUpdate()
+    {
+		Check();
+		
+		Move();
 	}
 
 	void SetInfoBoard()
@@ -67,35 +88,35 @@ public class playercontroller : MonoBehaviour
 
 	void LateUpdate()
 	{
-
+		CallJump();
 		CallResetPosition();
 
 	}
 
 	void Move()
 	{
-		float MovementV = Input.GetAxis("Vertical");
-		float MovementH = Input.GetAxis("Horizontal");
-
-		Vector3 move = new Vector3(MovementH, 0.0f, MovementV);
+		float MovementV = Input.GetAxis("Vertical") / 100;
+		float MovementH = Input.GetAxis("Horizontal") * dragmul;
+		
+		
+		Vector3 move = new Vector3(MovementH, 0.0f, MovementV).normalized;
 		if (GetColliderStatus(true))
 		{
 			rigidBody.AddForce(move * moveSpeed);
+
+			
 		}
-		MoveMoment = move * moveSpeed;
+
+		rigidBody.AddForce(0, 0, speedpost);
 	}
 
 	void Check()
 	{
 
-		if (speed.sqrMagnitude > limitSpeed && GetColliderStatus(true))//we've dun goof'd here
-		{
-
-			Debug.Log(" 2fast: ");
-			rigidBody.velocity = speed.normalized * SpeedComp;
-
-		}
-
+		var x = Mathf.Clamp(speed.x, limitSpeed * -1, limitSpeed);
+		var y = Mathf.Clamp(speed.y, limitSpeed * -1, limitSpeed);
+		var z = Mathf.Clamp(speed.z, limitSpeedpost * -1, limitSpeedpost);
+		rigidBody.velocity = new Vector3(x, y, z);
 	}
 
 	//only call it from LateUpdate
@@ -119,7 +140,7 @@ public class playercontroller : MonoBehaviour
 	}
 	void Jump()
 	{
-		rigidBody.AddForce(new Vector3(MoveMoment.x, 10f * jumpSpeedMult, MoveMoment.z));
+		rigidBody.AddForce(new Vector3(0, 10f * jumpSpeedMult, 0));
 
 
 
@@ -128,6 +149,9 @@ public class playercontroller : MonoBehaviour
 	void getVelocity()
 	{
 		speed = rigidBody.velocity;
+		
+		
+		
 
 	}
 
@@ -141,6 +165,7 @@ public class playercontroller : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		
 
 		if (other.gameObject.CompareTag("Coin"))
 		{
@@ -149,10 +174,13 @@ public class playercontroller : MonoBehaviour
 		}
 		if (other.gameObject.CompareTag("trigger"))
 		{
-			Instantiate(floorprefab, new Vector3(0, 0, range), Quaternion.identity);
+			x = x + 1;
+			GameObject clone = Instantiate(floorprefab, new Vector3(0, 0, range), Quaternion.identity);
 			Instantiate(triggercube, new Vector3(0, 0, range), Quaternion.identity);
+			clone.name = ("clone" + x);
 			Destroy(other.gameObject);
 			range = range + 40;
+			GameObject.Find("clone" + (x - 2)).SetActive(false);
 
 
 
