@@ -25,7 +25,7 @@ public class playercontroller : MonoBehaviour
 	public GameObject floorprefab;
 	public GameObject triggercube;
 	Vector3 floorposition = new Vector3(1, 1, 1);
-	float range = 40;
+	float range = 80;
 	GameObject[] oldfloors;
 	public float speedpost = 30;
 	int x = 0;
@@ -40,8 +40,9 @@ public class playercontroller : MonoBehaviour
 		
 	
 	{
-		GameObject clone = Instantiate(floorprefab, new Vector3(0, 0,0 ), Quaternion.identity);
-		clone.name = ("Clone 1");
+		GameObject startfloor = Instantiate(floorprefab, new Vector3(0, 0,0 ), Quaternion.identity);
+		GameObject startfloor2 = Instantiate(floorprefab, new Vector3(0, 0, 40), Quaternion.identity);
+		
 		initialPosition = transform.position;
 		rigidBody = GetComponent<Rigidbody>();
 		SetInfoBoard();
@@ -176,11 +177,11 @@ public class playercontroller : MonoBehaviour
 		{
 			x = x + 1;
 			GameObject clone = Instantiate(floorprefab, new Vector3(0, 0, range), Quaternion.identity);
-			Instantiate(triggercube, new Vector3(0, 0, range), Quaternion.identity);
+			Instantiate(triggercube, new Vector3(0, 0, range - 40), Quaternion.identity);
 			clone.name = ("clone" + x);
 			Destroy(other.gameObject);
 			range = range + 40;
-			GameObject.Find("clone" + (x - 2)).SetActive(false);
+			GameObject.Find("clone" + (x - 3)).SetActive(false);
 
 
 
