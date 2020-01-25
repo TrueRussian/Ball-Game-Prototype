@@ -77,7 +77,7 @@ public class playercontroller : MonoBehaviour
 	}
 	void InfoBoardUpdate()
 	{
-		InfoBoard.text = "Your speed: ";
+		InfoBoard.text = "Info ";
 		VectorSpeed.text = "Vector3 - " + speed;
 		floatSpeed.text = "Float - " + speed.sqrMagnitude;
 		coliding.text = "Coliding Status - " + collSetup.isColliding;
