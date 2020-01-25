@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 8a75dd0bd594f494c85eff36df5f47f0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - InfoBoard: {instanceID: 0}
+  - floatSpeed: {instanceID: 0}
+  - VectorSpeed: {instanceID: 0}
+  - coliding: {instanceID: 0}
+  - score: {instanceID: 0}
+  - floorprefab: {fileID: 4338081502954342550, guid: 89d9a0de9586127479cae1555d1b1583,
+      type: 3}
+  - triggercube: {fileID: 5952643653756208511, guid: 8797461ba3e8bf74d9ca586abca533b0,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
